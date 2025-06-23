@@ -203,6 +203,8 @@ static inline QDF_STATUS dp_txrx_resume(ol_txrx_soc_handle soc)
 		goto ret;
 	}
 
+	cdp_set_tx_pause(soc, false);
+
 	refill_thread = &dp_ext_hdl->refill_thread;
 	if (refill_thread->enabled) {
 		qdf_status = dp_rx_refill_thread_resume(refill_thread);
@@ -249,6 +251,7 @@ static inline QDF_STATUS dp_txrx_suspend(ol_txrx_soc_handle soc)
 	if (QDF_IS_STATUS_ERROR(qdf_status) && refill_thread->enabled)
 		dp_rx_refill_thread_resume(refill_thread);
 
+	cdp_set_tx_pause(soc, true);
 ret:
 	return qdf_status;
 }
